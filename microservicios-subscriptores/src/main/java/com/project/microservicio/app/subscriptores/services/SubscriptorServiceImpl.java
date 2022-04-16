@@ -53,6 +53,11 @@ public class SubscriptorServiceImpl extends CommonServiceImpl<Subscriptor, Subsc
 	}
 
 	@Override
+	public Actividad editarActividad(Actividad actividad, Long id) {
+		return actividadFeignClient.editarActividad(actividad, id);
+	}
+	
+	@Override
 	public List<Actividad> nuevas(List<Actividad> actividades) {
 		return actividadFeignClient.nuevas(actividades);
 	}
@@ -98,6 +103,8 @@ public class SubscriptorServiceImpl extends CommonServiceImpl<Subscriptor, Subsc
 	public List<Subscriptor> findByNombre(String term) {
 		return repository.findByNombre(term);
 	}
+
+	
 
 	
 

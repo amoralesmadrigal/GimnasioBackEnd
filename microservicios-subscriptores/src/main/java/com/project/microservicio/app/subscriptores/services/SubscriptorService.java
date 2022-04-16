@@ -22,6 +22,7 @@ public interface SubscriptorService extends CommonService<Subscriptor> {
 
 	//microservicio actividades
 	public Actividad nuevo(Actividad entity);
+	public Actividad editarActividad(Actividad actividad, Long id);
 	public List<Actividad> nuevas(List<Actividad> actividad);
 	public Actividad mostrar(Long id);
 	public List<Actividad> listar();

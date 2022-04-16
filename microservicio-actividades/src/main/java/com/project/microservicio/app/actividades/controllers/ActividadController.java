@@ -55,6 +55,7 @@ public class ActividadController extends CommonController<Actividad, ActividadSe
 		
 		Actividad actividadDB = direccionOpt.get();
 		actividadDB.setAforoMaximo(actividad.getAforoMaximo());
+		actividadDB.setAforoActual(actividad.getAforoActual());
 		actividadDB.setDuracion(actividad.getDuracion());
 		actividadDB.setFin(actividad.getFin());
 		actividadDB.setInicio(actividad.getInicio());

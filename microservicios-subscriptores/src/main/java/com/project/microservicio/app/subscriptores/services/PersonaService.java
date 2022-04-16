@@ -12,7 +12,11 @@ public interface PersonaService {
 	
 	public Optional<Persona> findByUsername(String username);
 	
+	public Iterable<Persona> findByUser(String username);
+	
 	public Persona guardar(Persona persona);
 	
 	public void eliminarById(Long id);
+	
+	public Iterable<Persona> findAll();
 }

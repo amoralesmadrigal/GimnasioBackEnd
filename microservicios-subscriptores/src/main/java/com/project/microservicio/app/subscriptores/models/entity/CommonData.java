@@ -12,7 +12,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -29,39 +28,32 @@ public abstract class CommonData {
 	@Column(name = "nombre" , length = 20)
 	@NotNull
 	@NotBlank
-	@Max(value = 20)
 	private String nombre;
 	
 	@Column(name = "primer_apellido",  length = 20)
 	@NotNull
 	@NotBlank
-	@Max(value = 20)
 	private String primerApellido;
 	
 	@Column(name = "segundo_apellido", length = 20)
-	@Max(value = 20)
 	private String segundoApellido;
 	
 	@Column(name = "documentacion", length = 15)
 	@NotNull
 	@NotBlank
-	@Max(value = 15)
 	private String documentacion;
 	
 	@Column(name = "numero_telefono", length = 10)
-	@Max(value = 10)
 	private String numeroTelefono;
 	
 	@Column(name = "email", length = 30)
 	@Email
-	@Max(value = 30)
 	private String email;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "fecha_nacimiento", length = 30)
 	@NotNull
 	@NotBlank
-	@Max(value = 30)
 	private String fechaNacimiento;
 	
 	@Column(name = "created_at")

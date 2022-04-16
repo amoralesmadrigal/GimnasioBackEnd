@@ -33,6 +33,9 @@ public class Actividad {
 	@Column(name = "aforo_maximo")
 	private Integer aforoMaximo;
 	
+	@Column(name = "aforo_actual")
+	private Integer aforoActual = 0;
+	
 	private Boolean lleno;
 	
 	@Column(name = "created_at")
@@ -136,5 +139,13 @@ public class Actividad {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public Integer getAforoActual() {
+		return aforoActual;
+	}
+
+	public void setAforoActual(Integer aforoActual) {
+		this.aforoActual = aforoActual;
 	}
 }

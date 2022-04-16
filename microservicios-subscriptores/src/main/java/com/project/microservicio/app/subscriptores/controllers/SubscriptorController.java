@@ -156,15 +156,49 @@ public class SubscriptorController extends CommonController<Subscriptor, Subscri
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 
-		Subscriptor subscriptorDB = subscriptorOpt.get();
-		SubscriptorActividad subscriptorActividad = new SubscriptorActividad();
-		subscriptorActividad.setActividadId(idActividad);
-		subscriptorActividad.setSubscriptor(subscriptorDB);
+		if(actividadDB.getLleno() != null && actividadDB.getLleno()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Actividad llena; imposible de asignar");
+		}else {
+			Subscriptor subscriptorDB = subscriptorOpt.get();
+			SubscriptorActividad subscriptorActividad = new SubscriptorActividad();
+			subscriptorActividad.setActividadId(idActividad);
+			subscriptorActividad.setSubscriptor(subscriptorDB);
 
-		subscriptorDB.addSubscriptorActividad(subscriptorActividad);
-		subscriptorDB.addActividad(actividadDB);
+			subscriptorDB.addSubscriptorActividad(subscriptorActividad);
+			subscriptorDB.addActividad(actividadDB);
+			
+			Subscriptor guardar = service.guardar(subscriptorDB);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(subscriptorDB));
+			
+			Integer aforoActual = actividadDB.getAforoActual();
+			Integer aforoMaximo = actividadDB.getAforoMaximo();
+			
+			if(aforoActual == null) {
+				aforoActual = 1;
+			}else {
+				aforoActual = aforoActual+1;
+			}
+			
+			if(aforoMaximo.equals(aforoActual)) {
+				actividadDB.setLleno(true);
+			}
+			
+			actividadDB.setAforoActual(aforoActual);
+
+			try {
+				// MicroServicio de actividades
+				service.editarActividad(actividadDB, actividadDB.getId());
+				
+			} catch (FeignException e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			}
+			
+			return ResponseEntity.status(HttpStatus.CREATED).body(guardar);
+		}
+		
+		
+		
+		
 	}
 
 	@PutMapping("/subscriptor-actividad/{idSubscriptor}")
@@ -186,9 +220,41 @@ public class SubscriptorController extends CommonController<Subscriptor, Subscri
 			if (actividades.contains(integer.getActividadId())) {
 				iterator.remove();
 			}
-		}
+			
+			//restar actividad
+			Actividad actividadDB = null;
+			try {
+				// MicroServicio de actividades
+				actividadDB = service.mostrar(integer.getActividadId());
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(subscriptorDB));
+			} catch (FeignException e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			}
+			
+			Integer aforoActual = actividadDB.getAforoActual();
+			Integer aforoMaximo = actividadDB.getAforoMaximo();
+			
+			aforoActual = aforoActual-1;
+			
+			if(!aforoActual.equals(aforoMaximo)) {
+				actividadDB.setLleno(false);
+			}
+			
+			actividadDB.setAforoActual(aforoActual);
+			
+
+			try {
+				// MicroServicio de actividades
+				service.editarActividad(actividadDB, actividadDB.getId());
+				
+			} catch (FeignException e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			}
+		}
+		
+		Subscriptor guardar = service.guardar(subscriptorDB);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(guardar);
 	}
 
 	@PostMapping("/subscriptor-actividad/{idSubscriptor}")

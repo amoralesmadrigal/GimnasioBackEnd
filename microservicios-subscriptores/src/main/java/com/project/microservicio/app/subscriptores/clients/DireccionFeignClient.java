@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.project.microservicio.app.subscriptores.clients.fallbacks.DireccionFeignClientFallBack;
 import com.project.microservicio.commons.direcciones.models.entity.Direccion;
 
-@FeignClient(name = "microservicio-direcciones")
+@FeignClient(name = "${feign.name.microservicio.direcciones}", fallback = DireccionFeignClientFallBack.class)
 public interface DireccionFeignClient {
 	
 	@PostMapping("/direcciones-rest")
@@ -26,4 +27,6 @@ public interface DireccionFeignClient {
 	
 	@GetMapping("/direcciones-rest/buscar-direccion/{id}")
 	public Direccion buscarDireccionById(@PathVariable Long id);
+	
+	
 }

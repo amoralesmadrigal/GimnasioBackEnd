@@ -23,7 +23,7 @@ import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 
 
-@FeignClient(name = "microservicio-documentos")
+@FeignClient(name = "${feign.name.microservicio.documentos}")
 public interface DocumentoFeignClient {
 	
 	@Configuration

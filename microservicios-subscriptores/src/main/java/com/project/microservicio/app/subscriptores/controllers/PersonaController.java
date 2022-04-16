@@ -30,6 +30,28 @@ public class PersonaController {
 	@Autowired
 	private PersonaService service;
 	
+	
+	@GetMapping
+	public ResponseEntity<?> listar(){
+		return ResponseEntity.ok().body(service.findAll());
+	}
+	
+	@GetMapping("/filtrar/{term}")
+	public ResponseEntity<?> filtrar(@PathVariable String term){
+		return ResponseEntity.ok().body(service.findByUser(term));
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> mostrar(@PathVariable Long id){
+		
+		Optional<Persona> personaOpt = service.findById(id);
+		if(personaOpt.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok().body(personaOpt.get());
+	}
+	
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody Persona persona, BindingResult result){
 		
@@ -120,7 +142,7 @@ public class PersonaController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(regreso.getId());
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/rol/{id}")
 	public ResponseEntity<?> getRol(@PathVariable Long id){
 		
 		Optional<Persona> personaOpt = service.findById(id);

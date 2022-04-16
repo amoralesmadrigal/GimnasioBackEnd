@@ -47,4 +47,16 @@ public class PersonaServiceImpl implements PersonaService {
 		
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Persona> findAll() {
+		return repository.findAll();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Persona> findByUser(String username) {
+		return repository.findByUser(username);
+	}
+
 }
